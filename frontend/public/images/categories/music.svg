@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" preserveAspectRatio="xMidYMid slice">
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#14b8a6"/><stop offset="1" stop-color="#2563eb"/></linearGradient>
+<linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity=".75"/></linearGradient>
+</defs>
+<rect width="640" height="400" fill="url(#g)"/>
+<circle cx="560" cy="60" r="130" fill="#fff" opacity=".10"/>
+<circle cx="60" cy="360" r="110" fill="#fff" opacity=".10"/>
+<circle cx="320" cy="430" r="160" fill="#000" opacity=".06"/>
+
+<g fill="#fff"><rect x="150" y="180.0" width="14" height="40" rx="7" opacity="0.67"/><rect x="176" y="155.0" width="14" height="90" rx="7" opacity="0.8200000000000001"/><rect x="202" y="170.0" width="14" height="60" rx="7" opacity="0.7300000000000001"/><rect x="228" y="135.0" width="14" height="130" rx="7" opacity="0.9400000000000001"/><rect x="254" y="150.0" width="14" height="100" rx="7" opacity="0.8500000000000001"/><rect x="280" y="125.0" width="14" height="150" rx="7" opacity="1.0"/><rect x="306" y="160.0" width="14" height="80" rx="7" opacity="0.79"/><rect x="332" y="140.0" width="14" height="120" rx="7" opacity="0.9100000000000001"/><rect x="358" y="175.0" width="14" height="50" rx="7" opacity="0.7000000000000001"/><rect x="384" y="145.0" width="14" height="110" rx="7" opacity="0.88"/><rect x="410" y="165.0" width="14" height="70" rx="7" opacity="0.76"/><rect x="436" y="130.0" width="14" height="140" rx="7" opacity="0.9700000000000001"/><rect x="462" y="155.0" width="14" height="90" rx="7" opacity="0.8200000000000001"/><rect x="488" y="170.0" width="14" height="60" rx="7" opacity="0.7300000000000001"/><rect x="514" y="150.0" width="14" height="100" rx="7" opacity="0.8500000000000001"/><rect x="540" y="180.0" width="14" height="40" rx="7" opacity="0.67"/><rect x="566" y="165.0" width="14" height="70" rx="7" opacity="0.76"/><rect x="592" y="185.0" width="14" height="30" rx="7" opacity="0.64"/></g>
+<g transform="translate(470 90)"><circle cx="14" cy="100" r="22" fill="#fde68a"/><rect x="30" y="-10" width="9" height="110" rx="4" fill="#fde68a"/><path d="M39 -10 C 80 0, 90 40, 60 60 C 80 25, 60 12, 39 18 Z" fill="#fde68a"/></g>
+<circle cx="130" cy="95" r="8" fill="#fff" opacity=".7"/><circle cx="165" cy="320" r="6" fill="#fff" opacity=".7"/>
+</svg>

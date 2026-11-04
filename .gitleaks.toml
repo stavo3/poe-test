@@ -1,0 +1,14 @@
+# gitleaks configuration used by the "secret-scan" job in .github/workflows/ci.yml.
+title = "HustleHub+ secret scan"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Unit/integration test fixtures use throw-away dummy values (e.g. the weak/wrong passwords that the tests must reject) and lock files contain package hashes."
+paths = [
+  '''.*/tests/.*''',
+  '''.*/src/tests/.*''',
+  '''.*/e2e/.*''',
+  '''package-lock\.json''',
+]

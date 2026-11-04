@@ -1,0 +1,10 @@
+node_modules
+dist
+coverage
+reports
+.env
+Dockerfile
+e2e
+playwright-report
+test-results
+playwright.config.js

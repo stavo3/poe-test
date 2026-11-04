@@ -1,0 +1,56 @@
+{
+  "__inputs": [{ "name": "DS_LOKI", "label": "Loki", "type": "datasource", "pluginId": "loki", "pluginName": "Loki" }],
+  "title": "HustleHub+ security & business events",
+  "uid": "hustlehub-events",
+  "schemaVersion": 39,
+  "version": 1,
+  "time": { "from": "now-6h", "to": "now" },
+  "refresh": "30s",
+  "panels": [
+    {
+      "id": 1, "type": "timeseries", "title": "Login attempts (success / failure / blocked)",
+      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 },
+      "datasource": { "type": "loki", "uid": "${DS_LOKI}" },
+      "targets": [{ "refId": "A", "legendFormat": "{{event}}",
+        "expr": "sum by (event) (count_over_time({app=\"hustlehub-api\", log_type=\"security\"} | json | event=~\"login_success|login_failure|login_blocked\" [$__interval]))" }]
+    },
+    {
+      "id": 2, "type": "timeseries", "title": "Bookings and transactions",
+      "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 },
+      "datasource": { "type": "loki", "uid": "${DS_LOKI}" },
+      "targets": [{ "refId": "A", "legendFormat": "{{event}}",
+        "expr": "sum by (event) (count_over_time({app=\"hustlehub-api\", log_type=\"security\"} | json | event=~\"booking_created|transaction_recorded\" [$__interval]))" }]
+    },
+    {
+      "id": 3, "type": "stat", "title": "Account lockouts",
+      "gridPos": { "x": 0, "y": 8, "w": 6, "h": 5 },
+      "datasource": { "type": "loki", "uid": "${DS_LOKI}" },
+      "targets": [{ "refId": "A", "expr": "sum(count_over_time({app=\"hustlehub-api\", log_type=\"security\"} | json | event=\"account_locked\" [$__range]))" }]
+    },
+    {
+      "id": 4, "type": "stat", "title": "Access denied + rejected tokens",
+      "gridPos": { "x": 6, "y": 8, "w": 6, "h": 5 },
+      "datasource": { "type": "loki", "uid": "${DS_LOKI}" },
+      "targets": [{ "refId": "A", "expr": "sum(count_over_time({app=\"hustlehub-api\", log_type=\"security\"} | json | event=~\"access_denied|token_rejected\" [$__range]))" }]
+    },
+    {
+      "id": 5, "type": "stat", "title": "Application errors",
+      "gridPos": { "x": 12, "y": 8, "w": 6, "h": 5 },
+      "datasource": { "type": "loki", "uid": "${DS_LOKI}" },
+      "targets": [{ "refId": "A", "expr": "sum(count_over_time({app=\"hustlehub-api\", log_type=\"app\"} | json | level=\"error\" [$__range]))" }]
+    },
+    {
+      "id": 6, "type": "timeseries", "title": "HTTP requests",
+      "gridPos": { "x": 18, "y": 8, "w": 6, "h": 5 },
+      "datasource": { "type": "loki", "uid": "${DS_LOKI}" },
+      "targets": [{ "refId": "A", "expr": "sum(count_over_time({app=\"hustlehub-api\", log_type=\"access\"} [$__interval]))" }]
+    },
+    {
+      "id": 7, "type": "logs", "title": "Security events (latest)",
+      "gridPos": { "x": 0, "y": 13, "w": 24, "h": 10 },
+      "datasource": { "type": "loki", "uid": "${DS_LOKI}" },
+      "options": { "wrapLogMessage": true, "sortOrder": "Descending" },
+      "targets": [{ "refId": "A", "expr": "{app=\"hustlehub-api\", log_type=\"security\"}" }]
+    }
+  ]
+}

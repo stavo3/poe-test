@@ -1,0 +1,54 @@
+{
+  "info": {
+    "name": "HustleHub+ Part 2 - Rate Limiting",
+    "description": "Run with 15 iterations against a freshly started server (default limit of 10). Attempts 1-10 must return 401, attempts 11-15 must return 429.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Login with wrong password (repeated)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"ratelimit.probe@example.com\",\n  \"password\": \"WrongPassword1!\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const limit = Number(pm.environment.get('authRateLimit')) || 10;",
+              "const attempt = pm.info.iteration + 1; // iteration is 0-based",
+              "if (attempt <= limit) {",
+              "  pm.test(`Attempt ${attempt}: within the limit, rejected normally (401)`, () => pm.response.to.have.status(401));",
+              "} else {",
+              "  pm.test(`Attempt ${attempt}: over the limit, blocked (429)`, () => pm.response.to.have.status(429));",
+              "  pm.test(`Attempt ${attempt}: rate-limit message returned`, () => pm.expect(pm.response.json().message).to.include('Too many'));",
+              "}",
+              "pm.test(`Attempt ${attempt}: RateLimit headers present`, () => pm.expect(pm.response.headers.has('RateLimit-Limit')).to.be.true);"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

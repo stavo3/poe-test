@@ -1,0 +1,75 @@
+# HustleHub+ full stack: MongoDB + HTTPS API + nginx-served React client.
+#   1. cp .env.example .env   and fill in JWT_SECRET, MONGO_USER, MONGO_PASSWORD, SEED_PASSWORD
+#      (generate each secret with:  openssl rand -hex 32).  .env is git-ignored - never commit it.
+#   2. docker compose up --build
+#   3. (first run only) seed demo data:  docker compose run --rm api npm run seed
+#      (if you change MONGO_USER / MONGO_PASSWORD later, run `docker compose down -v` first)
+#   4. open http://localhost:8080
+name: hustlehub
+
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    environment:
+      # MongoDB authentication is switched on: the root user is created from these values.
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:?Set MONGO_USER in .env}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:?Set MONGO_PASSWORD in .env}
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    # No ports published: the database is reachable only from other containers.
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      # The connection string is assembled from .env values - nothing is hardcoded here.
+      MONGO_URI: mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongo:27017/hustlehub?authSource=admin
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env (openssl rand -hex 32)}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-1h}
+      CORS_ORIGIN: http://localhost:8080
+      TRUST_PROXY: 1            # one reverse proxy (nginx) in front of the API
+      LOGIN_MAX_ATTEMPTS: ${LOGIN_MAX_ATTEMPTS:-5}
+      LOCKOUT_MINUTES: ${LOCKOUT_MINUTES:-15}
+      AUTH_RATE_LIMIT_MAX: ${AUTH_RATE_LIMIT_MAX:-10}
+      BOOKING_RATE_LIMIT_MAX: ${BOOKING_RATE_LIMIT_MAX:-20}
+      SEED_PASSWORD: ${SEED_PASSWORD:-}   # only read by `npm run seed`
+      LOG_DIR: /app/logs
+      # Cloud logging (Grafana Cloud Loki) - disabled unless all three are set in .env
+      LOKI_URL: ${LOKI_URL:-}
+      LOKI_USER: ${LOKI_USER:-}
+      LOKI_API_KEY: ${LOKI_API_KEY:-}
+      LOKI_ENV: ${LOKI_ENV:-docker}
+    volumes:
+      - api-logs:/app/logs      # app.log, security.log, access.log survive restarts
+    ports:
+      - "127.0.0.1:5000:5000"   # optional: direct access for Postman (localhost only)
+
+  client:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: /api
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+
+volumes:
+  mongo-data:
+  api-logs:

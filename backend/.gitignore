@@ -1,0 +1,9 @@
+node_modules/
+.env
+npm-debug.log
+*.log
+certs/*.pem
+logs/
+coverage/
+reports/*.json
+postman/newman-report.json

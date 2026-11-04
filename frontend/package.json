@@ -1,0 +1,40 @@
+{
+  "name": "hustlehub-frontend",
+  "version": "3.0.0",
+  "description": "HustleHub+ React frontend - Part 3: DevSecOps, Monitoring and Finalisation",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint .",
+    "lint:report": "node scripts/lint-report.cjs",
+    "test:ci": "vitest run --coverage",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.18.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.13.0",
+    "@playwright/test": "^1.49.0",
+    "@testing-library/jest-dom": "^6.5.0",
+    "@testing-library/react": "^16.0.1",
+    "@testing-library/user-event": "^14.5.2",
+    "@vitejs/plugin-react": "^5.0.0",
+    "@vitest/coverage-v8": "^5.0.5",
+    "eslint": "^9.13.0",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "globals": "^15.11.0",
+    "jsdom": "^25.0.1",
+    "vite": "^8.2.2",
+    "vitest": "^5.0.5"
+  }
+}

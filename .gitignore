@@ -1,0 +1,10 @@
+.env
+node_modules/
+logs/
+coverage/
+dist/
+*.log
+certs/*.pem
+evidence/
+*.pem
+newman-report.json
